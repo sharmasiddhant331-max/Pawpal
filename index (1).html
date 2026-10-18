@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fff6f1">
+<meta name="description" content="PawPal is your cute animal-care buddy. Search pets and learn about food, habitat, hygiene, behavior and safety.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="pawpal-icon.svg">
+<title>PawPal — Animal Care Guide</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --ink: light-dark(#3d2d37, #fff1f4);
+  --muted: light-dark(#866f7a, #c9b4c0);
+  --paper: light-dark(#fffaf7, #1c1720);
+  --surface: light-dark(#ffffff, #28202c);
+  --soft: light-dark(#fff0f1, #392531);
+  --soft2: light-dark(#f8edff, #30243a);
+  --peach: light-dark(#ffe5d5, #4b302b);
+  --pink: light-dark(#e66f91, #ff9fbb);
+  --pink-dark: light-dark(#b74468, #ffb4c9);
+  --lilac: light-dark(#c5b4ff, #9d8adf);
+  --mint: light-dark(#dff5e9, #234638);
+  --line: light-dark(#f0dfe5, #4d3746);
+  --shadow: 0 18px 45px rgba(119, 65, 89, .10);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: ui-rounded, "Trebuchet MS", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+button, input { font: inherit; }
+button { cursor: pointer; }
+a { color: var(--pink-dark); }
+.app-root { min-height: 100vh; width: 100%; background-color: light-dark(#fff8f5, #1b151e); color: var(--ink); overflow: hidden; }
+.wrap { max-width: 1280px; margin: auto; padding: 0 26px; }
+.topbar { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:22px 0; }
+.brand { display:flex; align-items:center; gap:11px; font-weight:900; letter-spacing:-.7px; font-size:25px; }
+.brand-mark { width:44px;height:44px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,#ffcbd9,#ffe6cd);box-shadow:0 7px 20px rgba(217,111,145,.2);font-size:23px; }
+.brand small { display:block;color:var(--muted);font-size:10px;letter-spacing:2px;font-weight:800;text-transform:uppercase;margin-top:1px; }
+.top-actions { display:flex; align-items:center; gap:10px; }
+.pill-button { border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:999px; padding:10px 15px; font-size:13px; font-weight:800; transition:transform .18s,background .18s; }
+.pill-button:hover { transform:translateY(-2px); background:var(--soft); }
+.hero { position:relative; background:linear-gradient(112deg, #ffeadc 0%, #ffeaf0 53%, #f0eaff 100%); border-radius:32px; padding:38px 38px 34px; display:grid; grid-template-columns:1.35fr .65fr; gap:28px; min-height:280px; overflow:hidden; color:#573a48; box-shadow:var(--shadow); }
+.hero:before,.hero:after { content:""; position:absolute; border-radius:50%; pointer-events:none; }
+.hero:before { width:230px;height:230px;background:rgba(255,255,255,.34);right:17%;top:-120px; }
+.hero:after { width:160px;height:160px;background:rgba(255,255,255,.28);right:-45px;bottom:-80px; }
+.eyebrow { display:inline-flex;align-items:center;gap:7px;border-radius:999px;background:rgba(255,255,255,.62);padding:8px 12px;font-size:11px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase; }
+.hero h1 { font-size:clamp(32px, 4.1vw, 54px); line-height:1.04; letter-spacing:-2px; margin:17px 0 13px; max-width:660px; }
+.hero p { color:#795c68; font-size:15px; line-height:1.7; max-width:590px; margin:0 0 21px; }
+.hero-badges { display:flex; flex-wrap:wrap; gap:8px; }
+.hero-badges span { background:rgba(255,255,255,.65);border:1px solid rgba(255,255,255,.75);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:800; }
+.hero-art { display:flex;align-items:center;justify-content:center;position:relative;min-height:200px;z-index:1; }
+.pet-orbit { width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.52);display:grid;place-items:center;position:relative;border:1px dashed rgba(199,126,153,.42); }
+.pet-orbit .big-pet { font-size:110px; filter:drop-shadow(0 14px 10px rgba(112,76,92,.16)); transform:rotate(-5deg); }
+.floaty { position:absolute;display:grid;place-items:center;border-radius:17px;background:#fffdfb;box-shadow:0 8px 18px rgba(110,65,81,.1);font-size:25px;width:53px;height:53px; }
+.floaty.one { left:-4px;top:22px;transform:rotate(-12deg); }
+.floaty.two { right:-7px;top:37px;transform:rotate(10deg); }
+.floaty.three { left:20px;bottom:0;transform:rotate(8deg); }
+.floaty.four { right:18px;bottom:0;transform:rotate(-8deg); }
+.search-area { margin:26px 0 19px; }
+.searchbox { display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);padding:10px 12px 10px 17px;border-radius:20px;box-shadow:0 7px 25px rgba(89,56,75,.05); }
+.search-icon { font-size:21px; }
+.searchbox input { flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--ink);font-size:15px;padding:8px 2px; }
+.searchbox input::placeholder { color:var(--muted); }
+.search-clear { border:0;border-radius:13px;background:var(--soft);color:var(--pink-dark);font-weight:900;padding:10px 13px; }
+.filter-row { display:flex;align-items:center;gap:8px;overflow:auto;padding:4px 0 12px;scrollbar-width:thin; }
+.filter { flex:0 0 auto;border:1px solid var(--line);background:var(--surface);color:var(--muted);font-size:12px;font-weight:900;padding:10px 14px;border-radius:999px;transition:all .18s; }
+.filter.active { background:#e96e94;color:white;border-color:#e96e94;box-shadow:0 6px 16px rgba(221,100,140,.2); }
+.filter .emoji { margin-right:5px; }
+.main-grid { display:grid;grid-template-columns:minmax(0, 1.42fr) minmax(320px, .85fr);gap:21px;align-items:start;margin:7px 0 27px; }
+.directory-head { display:flex;align-items:end;justify-content:space-between;gap:10px;margin:2px 0 14px; }
+.directory-head h2 { font-size:23px;letter-spacing:-.7px;margin:0; }
+.directory-head p { font-size:12px;color:var(--muted);margin:5px 0 0; }
+.count-badge { background:var(--soft);border-radius:999px;padding:7px 10px;font-size:11px;font-weight:900;color:var(--pink-dark);white-space:nowrap; }
+.animal-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px; }
+.animal-card { text-align:left;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:22px;padding:15px;position:relative;box-shadow:0 4px 13px rgba(95,57,76,.035);transition:transform .18s,border-color .18s,box-shadow .18s;color:var(--ink); }
+.animal-card:hover { transform:translateY(-3px);box-shadow:0 10px 22px rgba(95,57,76,.08); }
+.animal-card.selected { border:2px solid var(--pink);padding:14px;box-shadow:0 8px 25px rgba(218,101,142,.12); }
+.card-top { display:flex;justify-content:space-between;align-items:flex-start;gap:8px; }
+.animal-emoji { display:grid;place-items:center;width:64px;height:64px;border-radius:20px;background:var(--soft);font-size:38px;flex:0 0 auto; }
+.card-fav { background:transparent;border:0;color:#ce9cab;padding:3px;font-size:20px;line-height:1; }
+.card-fav.saved { color:#e75e89; }
+.animal-card h3 { font-size:15px;letter-spacing:-.25px;margin:13px 0 5px;line-height:1.25; }
+.animal-card .sub { color:var(--muted);font-size:11px;margin:0 0 13px;line-height:1.4; }
+.card-meta { display:flex;align-items:center;justify-content:space-between;gap:7px;flex-wrap:wrap; }
+.group-tag { display:inline-block;background:var(--soft2);color:light-dark(#7861a6,#d0c1ff);border-radius:999px;padding:6px 8px;font-size:10px;font-weight:900; }
+.temp-tag { font-size:10px;color:var(--muted);font-weight:800; }
+.detail-panel { border:1px solid var(--line);background:var(--surface);border-radius:28px;overflow:hidden;box-shadow:var(--shadow);position:sticky;top:12px; }
+.detail-banner { background:linear-gradient(120deg,var(--soft),var(--soft2));padding:22px 23px 20px;position:relative; }
+.detail-head { display:flex;gap:15px;align-items:center; }
+.detail-emoji { width:86px;height:86px;background:var(--surface);border-radius:26px;display:grid;place-items:center;font-size:52px;box-shadow:0 8px 20px rgba(95,57,76,.07);flex:0 0 auto; }
+.detail-title { min-width:0;flex:1; }
+.detail-title .mini { font-size:10px;text-transform:uppercase;letter-spacing:1.5px;font-weight:900;color:var(--pink-dark); }
+.detail-title h2 { font-size:24px;line-height:1.05;letter-spacing:-1px;margin:7px 0 7px; }
+.detail-title p { color:var(--muted);font-size:12px;line-height:1.4;margin:0; }
+.save-guide { width:39px;height:39px;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--pink-dark);font-size:21px;flex:0 0 auto; }
+.stat-grid { display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:16px 0 0; }
+.stat { border:1px solid var(--line);border-radius:15px;background:var(--surface);padding:10px 11px;min-width:0; }
+.stat label { display:block;color:var(--muted);font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px; }
+.stat strong { display:block;font-size:12px;line-height:1.4; }
+.detail-body { padding:17px 21px 22px; }
+.section-kicker { color:var(--pink-dark);font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;margin:0 0 12px; }
+.care-item { display:grid;grid-template-columns:36px minmax(0,1fr);gap:10px;padding:12px 0;border-bottom:1px solid var(--line); }
+.care-item:last-of-type { border-bottom:0; }
+.care-icon { width:34px;height:34px;border-radius:12px;background:var(--soft);display:grid;place-items:center;font-size:17px; }
+.care-item h4 { margin:0 0 5px;font-size:13px; }
+.care-item p { margin:0;color:var(--muted);font-size:12px;line-height:1.6; }
+.warning { margin-top:14px;border:1px solid light-dark(#f4d5a2,#785b30);background:light-dark(#fff8e9,#342819);padding:14px;border-radius:17px; }
+.warning h4 { margin:0 0 6px;font-size:12px;color:light-dark(#9b6022,#ffd38a);display:flex;gap:7px;align-items:center; }
+.warning p { margin:0;font-size:11px;line-height:1.6;color:light-dark(#815c38,#e2c9a5); }
+.detail-source { margin-top:12px;font-size:10px;color:var(--muted);line-height:1.5; }
+.detail-source a { color:var(--pink-dark);font-weight:800;text-decoration:none; }
+.empty { border:1px dashed var(--line);border-radius:22px;padding:28px 20px;text-align:center;color:var(--muted);grid-column:1/-1;background:var(--surface); }
+.empty .empty-emoji { font-size:40px;display:block;margin-bottom:9px; }
+.care-routine { display:grid;grid-template-columns:1.15fr .85fr;gap:15px;margin:25px 0 25px; }
+.routine-card,.safety-card { border:1px solid var(--line);border-radius:24px;background:var(--surface);padding:20px; }
+.routine-card h3,.safety-card h3 { margin:0;font-size:17px;letter-spacing:-.4px; }
+.routine-card .routine-sub,.safety-card .routine-sub { font-size:12px;color:var(--muted);margin:7px 0 14px;line-height:1.55; }
+.checks { display:grid;grid-template-columns:1fr 1fr;gap:9px; }
+.checkrow { display:flex;align-items:center;gap:9px;font-size:12px;font-weight:750;padding:10px;background:var(--paper);border:1px solid var(--line);border-radius:13px; }
+.checkrow input { accent-color:#e66f91;width:17px;height:17px; }
+.checkrow.done span { text-decoration:line-through;color:var(--muted); }
+.progress-track { height:8px;background:var(--soft);border-radius:999px;overflow:hidden;margin:12px 0 5px; }
+.progress-fill { height:100%;width:0;background:linear-gradient(90deg,#e66f91,#b9a5fb);border-radius:999px;transition:width .2s; }
+.progress-text { font-size:10px;color:var(--muted);font-weight:800; }
+.safety-list { margin:10px 0 0;padding:0;list-style:none;display:grid;gap:10px; }
+.safety-list li { display:grid;grid-template-columns:25px 1fr;gap:8px;font-size:12px;line-height:1.55;color:var(--muted); }
+.safety-list .safety-icon { width:24px;height:24px;border-radius:8px;background:var(--soft);display:grid;place-items:center; }
+.footer { border-top:1px solid var(--line);padding:22px 0 30px;color:var(--muted);font-size:11px;line-height:1.7; }
+.footer-top { display:flex;justify-content:space-between;gap:15px;align-items:start;flex-wrap:wrap; }
+.footer strong { color:var(--ink); }
+.sources { display:flex;flex-wrap:wrap;gap:8px;margin-top:9px; }
+.sources a { font-weight:800;text-decoration:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 10px;color:var(--pink-dark); }
+.footer-note { margin-top:11px;max-width:900px; }
+@media (max-width:980px) {
+ .main-grid { grid-template-columns:1fr; }
+ .detail-panel { position:relative;top:auto; }
+ .animal-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+ .hero { grid-template-columns:1fr .55fr; padding:29px; }
+ .care-routine { grid-template-columns:1fr; }
+}
+@media (max-width:640px) {
+ .wrap { padding:0 15px; }
+ .topbar { padding:15px 0; }
+ .brand { font-size:22px; }
+ .brand-mark { width:40px;height:40px; }
+ .top-actions .pill-button:first-child { display:none; }
+ .hero { border-radius:25px;padding:23px 20px 20px;grid-template-columns:1fr;gap:5px; }
+ .hero h1 { font-size:37px;letter-spacing:-1.6px; }
+ .hero p { font-size:13px; }
+ .hero-art { min-height:146px;margin-top:8px; }
+ .pet-orbit { width:154px;height:154px; }
+ .pet-orbit .big-pet { font-size:80px; }
+ .floaty { width:40px;height:40px;font-size:19px;border-radius:13px; }
+ .floaty.one { left:0;top:14px; }.floaty.two { right:0;top:14px; }.floaty.three { left:12px;bottom:-5px; }.floaty.four { right:12px;bottom:-4px; }
+ .search-area { margin-top:19px; }
+ .searchbox { border-radius:17px;gap:8px;padding-left:13px; }
+ .searchbox input { font-size:13px; }
+ .search-clear { padding:9px 10px;font-size:11px; }
+ .directory-head h2 { font-size:20px; }
+ .animal-grid { grid-template-columns:repeat(2,minmax(0,1fr));gap:9px; }
+ .animal-card { border-radius:18px;padding:11px; }
+ .animal-card.selected { padding:10px; }
+ .animal-emoji { width:54px;height:54px;border-radius:17px;font-size:32px; }
+ .animal-card h3 { font-size:13px;margin-top:10px; }
+ .animal-card .sub { font-size:10px; }
+ .group-tag { font-size:9px; }
+ .temp-tag { font-size:9px; }
+ .detail-banner { padding:17px; }
+ .detail-head { gap:10px; }
+ .detail-emoji { width:66px;height:66px;border-radius:20px;font-size:41px; }
+ .detail-title h2 { font-size:20px; }
+ .detail-title p { font-size:11px; }
+ .save-guide { width:35px;height:35px; }
+ .detail-body { padding:14px 16px 18px; }
+ .stat-grid { gap:7px; }
+ .stat { padding:9px; }
+ .stat strong { font-size:11px; }
+ .checks { grid-template-columns:1fr; }
+ .routine-card,.safety-card { padding:16px; }
+}
+@media (prefers-reduced-motion: reduce) { *,*::before,*::after {scroll-behavior:auto!important;transition:none!important;} }
+</style>
+</head>
+<body>
+<div class="app-root" id="pawpal-app">
+  <div class="wrap">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">🐾</span><span>PawPal<small>little paws, big love</small></span></div>
+      <div class="top-actions"><button class="pill-button" id="installApp" hidden>⬇️ Install app</button><button class="pill-button" id="showAll">🌼 Explore animals</button><button class="pill-button" id="showSaved">♡ Saved <span id="savedCount">0</span></button></div>
+    </header>
+
+    <section class="hero" aria-label="PawPal welcome">
+      <div>
+        <span class="eyebrow">✦ your pocket pet-care buddy</span>
+        <h1>Every paw, fin & hoof deserves <span style="color:#d95d86">a little love.</span></h1>
+        <p>Find your animal, learn what keeps them comfy, and discover their care routine — all in one cozy place.</p>
+        <div class="hero-badges"><span>🐶 Dogs & puppies</span><span>🐱 Cats & kittens</span><span>🐠 Fish friends</span><span>🐮 Farm buddies</span></div>
+      </div>
+      <div class="hero-art" aria-hidden="true"><div class="pet-orbit"><span class="big-pet">🐶</span><span class="floaty one">🐾</span><span class="floaty two">💗</span><span class="floaty three">🦴</span><span class="floaty four">✨</span></div></div>
+    </section>
+
+    <section class="search-area" aria-label="Search animals">
+      <div class="searchbox"><span class="search-icon">🔎</span><input id="animalSearch" type="search" autocomplete="off" placeholder="Search a pet or breed… try “Pomeranian”, “betta”, “cow”" aria-label="Search animals"><button class="search-clear" id="clearSearch">Clear</button></div>
+      <div class="filter-row" id="filters" aria-label="Animal categories"></div>
+    </section>
+
+    <main class="main-grid">
+      <section class="directory">
+        <div class="directory-head"><div><h2 id="directoryTitle">Meet your new animal besties</h2><p id="directorySubtitle">Tiny noses, whiskers, fins and hooves — choose a guide.</p></div><span class="count-badge" id="resultCount">25 guides</span></div>
+        <div class="animal-grid" id="animalGrid" aria-live="polite"></div>
+      </section>
+      <aside class="detail-panel" id="detailPanel" aria-label="Selected animal care guide"></aside>
+    </main>
+
+    <section class="care-routine">
+      <div class="routine-card">
+        <h3>🌷 A little daily-love checklist</h3>
+        <p class="routine-sub">A general reminder list for your routine. Match every task to your animal — fish need water testing, and farm animals need species-specific husbandry.</p>
+        <div class="checks" id="routineChecks">
+          <label class="checkrow"><input type="checkbox"><span>Fresh water checked</span></label>
+          <label class="checkrow"><input type="checkbox"><span>Right food & portion</span></label>
+          <label class="checkrow"><input type="checkbox"><span>Clean habitat / bedding</span></label>
+          <label class="checkrow"><input type="checkbox"><span>Play, movement or enrichment</span></label>
+          <label class="checkrow"><input type="checkbox"><span>Looked for unusual changes</span></label>
+          <label class="checkrow"><input type="checkbox"><span>Comfortable temperature</span></label>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text" id="progressText">0 of 6 little-care wins today 🌱</div>
+      </div>
+      <div class="safety-card">
+        <h3>🩺 When to call a vet</h3>
+        <p class="routine-sub">Pets often hide illness. Trust sudden changes, even when an animal looks cute and calm.</p>
+        <ul class="safety-list">
+          <li><span class="safety-icon">🚨</span><span><strong>Get urgent veterinary help</strong> for struggling to breathe, collapse, seizures, severe bleeding, suspected poisoning, or a swollen painful belly.</span></li>
+          <li><span class="safety-icon">👀</span><span><strong>Arrange a prompt check</strong> for not eating/drinking, repeated vomiting, unusual hiding, limping, eye changes or a sudden behavior shift.</span></li>
+          <li><span class="safety-icon">🤍</span><span><strong>Never give human medicine</strong> or force food/water without professional advice. For livestock, use a qualified large-animal veterinarian.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-top"><div><strong>Made with paw-shaped love. 🐾</strong><br>Care basics for curious animal people.</div><div>Browse • Learn • Care a little better</div></div>
+      <div class="sources"><a href="https://www.rspca.org.uk/adviceandwelfare/pets/dogs" target="_blank" rel="noreferrer">RSPCA · Dogs</a><a href="https://science.rspca.org.uk/en/web/rspca/adviceandwelfare/pets/cats" target="_blank" rel="noreferrer">RSPCA · Cats</a><a href="https://kb.rspca.org.au/categories/companion-animals/fish/how-should-i-care-for-my-goldfish" target="_blank" rel="noreferrer">RSPCA · Goldfish</a><a href="https://science.rspca.org.uk/en/web/rspca/adviceandwelfare/pets/fish/environment" target="_blank" rel="noreferrer">RSPCA · Aquarium setup</a><a href="https://www.merckvetmanual.com/management-and-nutrition/preventive-health-care-and-husbandry-of-dairy-cattle/animal-and-herd-productivity-in-dairy-cattle" target="_blank" rel="noreferrer">Merck Vet Manual · Cattle</a><a href="https://www.aspca.org/pet-care/aspca-poison-control/people-foods-avoid-feeding-your-pets" target="_blank" rel="noreferrer">ASPCA · Food hazards</a></div>
+      <p class="footer-note">Important: This is an introductory guide, not a diagnosis or a substitute for a veterinarian. Temperature and food needs change with breed, age, health, climate and local conditions. Fish require species-specific water parameters; reptiles and livestock may need specialist housing and care. Bite-force numbers are often not comparable across tests, so PawPal uses practical strength and safety notes instead. Always check guidance for the exact species and consult a veterinarian for individual care.</p>
+    </footer>
+  </div>
+</div>
+<script>
+const animals = [
+ {id:'lab',name:'Labrador Retriever',group:'Dogs',emoji:'🐕',tagline:'Friendly, active water-lover',size:'Medium–large',temp:'Comfortable indoor space; often around 18–26°C, but coat, age and health matter.',food:'A complete, age-appropriate dog food with measured portions; clean water always. Treats should be small and counted as part of the day’s food.',habitat:'A secure, shaded home with a comfy rest spot; daily walks, sniffing games and swimming only where safe.',hygiene:'Brush weekly (more during shedding), check ears after swimming, trim nails as needed and brush teeth with dog toothpaste.',movement:'Needs regular walks, play and training. Build activity gradually, especially for puppies and older dogs.',strength:'Strong, energetic retriever with a powerful pull and lots of stamina.',bite:'There is no single dependable bite-force number for every Labrador. Any dog can bite; use calm training and supervision.',caution:'Can overeat and gain weight. Avoid hot pavement and hard exercise in hot weather; never feed chocolate, grapes/raisins, onion or xylitol.',fact:'Usually food-motivated, so reward-based training can be a great fit.',source:'https://www.rspca.org.uk/adviceandwelfare/pets/dogs'},
+ {id:'gsd',name:'German Shepherd',group:'Dogs',emoji:'🐕‍🦺',tagline:'Smart, watchful working dog',size:'Large',temp:'Provide a cool, ventilated resting area and shade; comfort varies with coat, age and climate.',food:'Complete dog food matched to age, size and activity, split as recommended. Keep fresh water available.',habitat:'Needs safe space, daily enrichment, training and regular exercise with rest breaks.',hygiene:'Brush several times a week, check ears and paws, trim nails and maintain dental care.',movement:'Often needs substantial daily physical and mental activity; teach skills through positive reward-based training.',strength:'Powerful, athletic working build; can pull strongly when excited.',bite:'Breed-specific bite-force figures are not a reliable safety measure. Treat every dog with respect and avoid provoking or cornering.',caution:'Supervise around children and unfamiliar animals; watch for overheating and sudden changes in gait or comfort.',fact:'Mental games and predictable, kind training help this clever breed thrive.',source:'https://www.rspca.org.uk/adviceandwelfare/pets/dogs'},
+ {id:'golden',name:'Golden Retriever',group:'Dogs',emoji:'🐕',tagline:'Gentle-hearted, playful companion',size:'Medium–large',temp:'A cool, shaded, ventilated space; many do well indoors around 18–26°C, but individual needs vary.',food:'Balanced complete dog food and measured meals based on age, activity and body condition.',habitat:'Comfortable indoor rest plus safe walks, play and enrichment every day.',hygiene:'Brush several times weekly, check ears, trim nails and brush teeth with pet-safe toothpaste.',movement:'Regular walks and play; avoid forcing intense activity in heat or while growing.',strength:'Athletic and strong enough to pull hard on a leash when excited.',bite:'No single trustworthy breed number predicts bite risk. Any dog can bite, even a friendly one.',caution:'Monitor ears and skin, weight and heat comfort. Never give human painkillers or toxic foods.',fact:'Reward-based learning and games that use scent are often enjoyable.',source:'https://www.rspca.org.uk/adviceandwelfare/pets/dogs'},
+ {id:'indian-pariah',name:'Indian Pariah Dog',group:'Dogs',emoji:'🐕',tagline:'Adaptable, alert desi companion',size:'Medium',temp:'Often adapted to local climates, but all dogs need shade, airflow and clean water in Indian summers.',food:'A complete dog food suited to age and health; avoid relying on leftovers or unbalanced home-made meals.',habitat:'Secure shelter, companionship, gentle training, daily walks and enrichment.',hygiene:'Usually low-maintenance coat: brush regularly, check ticks/skin/ears and keep nails and teeth cared for.',movement:'Regular walks and play; choose cooler morning/evening periods during hot weather.',strength:'Agile, alert and often nimble; individual fitness and temperament vary.',bite:'Reliable standardized breed-specific bite figures are not available. Don’t test bite strength or approach a frightened dog.',caution:'Vaccination, parasite prevention and neutering advice should come from a local vet. Give unknown dogs space and never corner them.',fact:'“Desi dog” describes diverse local mixed and landrace dogs, not one identical body type.',source:'https://www.rspca.org.uk/adviceandwelfare/pets/dogs'},
+ {id:'pomeranian',name:'Pomeranian',group:'Dogs',emoji:'🐶',tagline:'Tiny fluff with a big personality',size:'Toy / small',temp:'Keep indoors and avoid overheating; tiny dogs can be vulnerable to temperature extremes.',food:'Small-breed complete dog food in measured portions; fresh water and safe, tiny treats.',habitat:'Indoor comfort, gentle play, secure harness and protection from falls or rough handling.',hygiene:'Comb the coat several times a week, brush teeth frequently and keep nails short.',movement:'Short walks and daily play; protect joints and avoid jumping from high furniture.',strength:'Small body, quick reactions and a confident bark — not a dog to treat like a toy.',bite:'No useful universal bite-force figure. Small bites can still hurt; respect body language and supervise handling.',caution:'Can overheat, and dental issues are common in small dogs. Do not leave in parked vehicles or carry by the legs.',fact:'Gentle early socialization can help prevent fearfulness and excessive barking.',source:'https://www.rspca.org.uk/adviceandwelfare/pets/dogs'},
+ {id:'beagle',name:'Beagle',group:'Dogs',emoji:'🐶',tagline:'Curious nose, cheerful explorer',size:'Small–medium',temp:'Offer shade and ventilation; avoid strenuous walks in the hottest part of the day.',food:'Balanced complete dog food with measured portions; scent-driven dogs may try to steal food.',habitat:'Secure fencing and leash walks are important because scent trails can distract them.',hygiene:'Brush weekly, check floppy ears regularly, trim nails and brush teeth.',movement:'Daily walks plus scent games and reward-based training.',strength:'Sturdy, energetic for its size; pulling and sudden chasing can surprise an owner.',bite:'No standardized number predicts bite risk; give dogs space around food and when frightened.',caution:'Use secure food storage and avoid toxic people-foods. Keep identification tags and a secure lead.',fact:'Scent puzzles can turn its powerful nose into a fun enrichment activity.',source:'https://www.rspca.org.uk/adviceandwelfare/pets/dogs'},
+ {id:'dsh-cat',name:'Domestic Shorthair Cat',group:'Cats',emoji:'🐈',tagline:'Whiskered, curious little roommate',size:'Small–medium',temp:'A comfortable indoor room is often suitable around 18–26°C; provide warm resting spots and cool choices.',food:'Complete cat food made for the cat’s life stage; cats need animal-based nutrients. Provide fresh water; no onion/garlic or chocolate.',habitat:'Safe indoor space, hiding spots, scratching posts, climbing options and daily play.',hygiene:'Scoop litter daily, keep the tray in a quiet spot, brush weekly and check teeth/ears.',movement:'Several short play sessions and food puzzles help meet hunting and mental needs.',strength:'Quick, flexible climber with sharp claws and teeth.',bite:'A cat bite can cause a serious puncture wound and infection; seek medical advice for a bite that breaks skin.',caution:'Never pull the tail or force cuddles. Prevent access to lilies, human medicines and unsafe foods.',fact:'Cats are obligate carnivores and often prefer several small meals rather than one huge meal.',source:'https://science.rspca.org.uk/en/web/rspca/adviceandwelfare/pets/cats'},
+ {id:'persian',name:'Persian Cat',group:'Cats',emoji:'😺',tagline:'Cloud-soft coat, calm companion',size:'Medium',temp:'Keep in a comfortable, well-ventilated room; flat-faced cats may struggle more with heat.',food:'Balanced complete cat food and fresh water; portions depend on age, size, activity and health.',habitat:'Quiet indoor setting, easy-access resting places, scratching areas and gentle daily play.',hygiene:'Comb long fur daily; gently clean face/eye area as advised by a vet; maintain dental care and litter hygiene.',movement:'Gentle play and short activity sessions; avoid overheating.',strength:'Agile enough to climb and scratch, though body shape and fitness vary.',bite:'Bite-force figures are not standardized or useful for safety. Even a calm cat can bite when stressed or painful.',caution:'Flat-faced features can affect breathing and comfort. Noisy breathing, discharge or heat distress deserves veterinary advice.',fact:'Daily brushing helps prevent painful tangles in the long coat.',source:'https://science.rspca.org.uk/en/web/rspca/adviceandwelfare/pets/cats'},
+ {id:'siamese',name:'Siamese Cat',group:'Cats',emoji:'🐱',tagline:'Chatty, social and clever',size:'Medium',temp:'Keep indoors at a steady, comfortable temperature; give access to warmer and cooler resting spots.',food:'Complete cat food with animal-based nutrients and constant access to fresh water.',habitat:'Secure windows, climbing shelves, toys and companionship; offer a calm space for rest.',hygiene:'Brush weekly, check ears, trim claws when needed and maintain dental health.',movement:'Interactive play, chasing toys and puzzle feeders every day.',strength:'Lean, agile jumper with sharp claws.',bite:'There is no simple reliable bite-force rating. Respect warning signs such as tail lashing, flattened ears or growling.',caution:'Can become bored without interaction. Never punish or corner a cat; provide places to retreat.',fact:'Many Siamese cats are vocal and enjoy predictable human interaction.',source:'https://science.rspca.org.uk/en/web/rspca/adviceandwelfare/pets/cats'},
+ {id:'maine-coon',name:'Maine Coon',group:'Cats',emoji:'🐈‍⬛',tagline:'Big fluffy cat with a gentle vibe',size:'Large',temp:'Provide a ventilated indoor environment; thick coat means extra care during hot weather.',food:'Complete food appropriate to age and body condition; portions should be adjusted by the cat’s vet if needed.',habitat:'Large stable cat tree, sturdy scratching posts, safe climbing areas and comfy resting places.',hygiene:'Comb the long coat several times a week, check for mats, trim claws and look after teeth.',movement:'Daily interactive play and climbing opportunities.',strength:'Larger and sturdy for a domestic cat; still needs gentle, respectful handling.',bite:'No standardized useful bite-force value; a bite can puncture skin and become infected.',caution:'Avoid overfeeding and watch for changes in movement or breathing. Large size does not mean rough handling is safe.',fact:'A sturdy, stable climbing set-up is especially useful for a bigger cat.',source:'https://science.rspca.org.uk/en/web/rspca/adviceandwelfare/pets/cats'},
+ {id:'goldfish',name:'Goldfish',group:'Fish',emoji:'🐠',tagline:'A curious swimmer, not a bowl ornament',size:'Varies by variety; can grow large',temp:'A commonly cited range is around 20–24°C for many goldfish; avoid sudden temperature swings and check variety-specific guidance.',food:'Quality goldfish pellets or flakes with occasional suitable variety; feed small portions that are eaten promptly.',habitat:'A spacious, fully cycled aquarium with strong filtration and oxygenation. A bowl is not suitable; larger water volumes are more stable.',hygiene:'Test ammonia, nitrite, nitrate and pH; maintain the filter and change water appropriately using dechlorinated, temperature-matched water.',movement:'Provide swimming space and suitable enrichment; avoid overcrowding.',strength:'Active swimmer that relies on healthy fins, oxygen and clean water.',bite:'Bite force is not a meaningful care measure for typical goldfish; handling them can injure their protective slime coat.',caution:'Clear water can still be unsafe. Never wash filter media with chlorinated tap water or release pet fish into local waterways.',fact:'Overfeeding is a common cause of poor water quality. Keep only what the filtered tank can support.',source:'https://kb.rspca.org.au/categories/companion-animals/fish/how-should-i-care-for-my-goldfish'},
+ {id:'betta',name:'Betta Fish',group:'Fish',emoji:'🐟',tagline:'Flowy fins, tropical-water specialist',size:'Small',temp:'Tropical water is commonly kept around 25–28°C; use a thermometer and a thermostatically controlled heater.',food:'Species-appropriate betta pellets with occasional suitable frozen foods; remove leftovers and avoid overfeeding.',habitat:'Heated, filtered aquarium with gentle flow, a lid and resting places. Tiny bowls do not provide stable conditions.',hygiene:'Test water quality; maintain the filter and perform regular partial water changes with dechlorinated, temperature-matched water.',movement:'Give room to swim and explore; avoid sharp plastic décor that can tear fins.',strength:'Small fish with delicate fins; strong currents can exhaust them.',bite:'Not a meaningful human-safety issue; avoid catching or handling the fish except when necessary for welfare.',caution:'Do not keep males together. Sudden temperature or water-chemistry changes can be dangerous.',fact:'A thermometer and stable water conditions matter more than decorative tank gadgets.',source:'https://science.rspca.org.uk/en/web/rspca/adviceandwelfare/pets/fish/environment'},
+ {id:'guppy',name:'Guppy',group:'Fish',emoji:'🐠',tagline:'Tiny tropical fish with bright tails',size:'Small',temp:'A commonly recommended tropical range is about 22–28°C; confirm the strain and keep temperature stable.',food:'Balanced tropical fish flakes or micro-pellets, with suitable variety in small amounts.',habitat:'A cycled, filtered aquarium with swimming space, cover and appropriate group composition.',hygiene:'Test ammonia and nitrite; keep the filter working and use dechlorinated water for changes.',movement:'Provide cover and room to swim; understand that guppies can breed quickly.',strength:'Small and active, but delicate and sensitive to poor water quality.',bite:'Bite strength is not relevant to handling safety for ordinary guppies.',caution:'Never add fish to an uncycled tank; avoid overcrowding and sudden temperature changes.',fact:'Mixed-sex groups may produce many fry, so plan for population growth.',source:'https://science.rspca.org.uk/en/web/rspca/adviceandwelfare/pets/fish/environment'},
+ {id:'koi',name:'Koi Carp',group:'Fish',emoji:'🎏',tagline:'Pond fish with big-space needs',size:'Large pond fish',temp:'Temperature needs change with season and pond conditions; focus on stable water, oxygen and species-specific advice.',food:'Quality koi food for the season and water temperature; feed measured amounts and remove uneaten food.',habitat:'A properly sized, filtered and aerated pond with safe depth, shelter and suitable stocking levels.',hygiene:'Monitor water chemistry and oxygen, clean filters as needed and remove decaying waste.',movement:'Need open swimming room and stable, well-managed water rather than a small indoor tank.',strength:'Strong swimmer that can grow much larger than many beginners expect.',bite:'Bite force is not a meaningful everyday safety measure; netting and handling can injure the fish.',caution:'Plan for adult size, winter conditions and local regulations before acquiring koi. Never release them into natural waters.',fact:'Pond filtration must be designed for both fish size and waste load.',source:'https://science.rspca.org.uk/en/web/rspca/adviceandwelfare/pets/fish/environment'},
+ {id:'cow',name:'Dairy Cow',group:'Farm',emoji:'🐄',tagline:'Gentle-looking giant with big needs',size:'Large livestock',temp:'There is no single ideal temperature for every breed. Provide shade, airflow and abundant clean water; heat stress risk rises with humidity.',food:'Forage such as suitable pasture or hay plus a balanced ration and minerals set by a livestock professional.',habitat:'Spacious, secure footing, dry resting areas, clean water and low-stress group management.',hygiene:'Keep bedding and lying areas clean and dry; use trained help for hoof, udder and routine health care.',movement:'Needs space to walk, lie down comfortably, socialize and access feed and water.',strength:'Very powerful body mass; can push, kick or trample even without intending harm.',bite:'Bite force is not the main risk. Kicks, crushing, horns (if present) and sudden movement are more important hazards.',caution:'Do not approach from behind, stand between animals in a tight space or handle cattle alone. Use experienced adult livestock handlers.',fact:'For dairy cattle, heat stress may begin at a temperature-humidity index around 72, but risk depends on multiple factors.',source:'https://www.merckvetmanual.com/management-and-nutrition/preventive-health-care-and-husbandry-of-dairy-cattle/animal-and-herd-productivity-in-dairy-cattle'},
+ {id:'buffalo',name:'Water Buffalo',group:'Farm',emoji:'🐃',tagline:'Strong herd animal that needs cooling',size:'Large livestock',temp:'No universal ideal range: provide shade, ventilation and plenty of clean water; cooling needs rise in hot, humid weather.',food:'Suitable roughage, pasture or fodder, clean water and balanced minerals/rations planned for age and production.',habitat:'Secure space, non-slip footing, shade and access to appropriate cooling. Wallowing needs depend on management and climate.',hygiene:'Clean housing and water troughs; trained handlers should manage hoof and health checks.',movement:'Needs space and calm herd handling; avoid crowding or surprising the animal.',strength:'Very powerful, heavy animal capable of pushing, kicking and trampling.',bite:'Bite force is not the main danger; horns (if present), body mass and unpredictable movement matter more.',caution:'Never approach or attempt to lead a buffalo alone. Keep a safe distance and use trained livestock handlers.',fact:'Heat management depends on local climate, breed, shade, water and the animal’s workload.',source:'https://www.merckvetmanual.com/management-and-nutrition/preventive-health-care-of-dairy-cattle/animal-and-herd-productivity-in-dairy-cattle'},
+ {id:'goat',name:'Goat',group:'Farm',emoji:'🐐',tagline:'Curious climber and social browser',size:'Small–medium livestock',temp:'Comfort depends on breed, coat and weather; offer dry shelter, shade and airflow with protection from cold rain.',food:'Suitable forage, browse, clean water and a balanced goat mineral mix; avoid sudden large changes in feed.',habitat:'Secure fencing, dry bedding, room to move and companionship from compatible goats.',hygiene:'Keep bedding dry, check feet regularly, and arrange parasite and vaccination care with a livestock vet.',movement:'Climbing and exploring opportunities on safe, sturdy structures.',strength:'Surprisingly strong and agile; can butt or knock people off balance.',bite:'Bite force is not the key risk. Horns and headbutting are bigger concerns.',caution:'Do not feed unfamiliar plants or large amounts of grain; keep children away from unsupervised livestock handling.',fact:'Goats are social animals and usually need appropriate goat companionship.',source:'https://www.merckvetmanual.com/management-and-nutrition/nutrition-beef-cattle/feeding-and-nutritional-management-of-beef-cattle'},
+ {id:'sheep',name:'Sheep',group:'Farm',emoji:'🐑',tagline:'Flock-minded grazer with fleece needs',size:'Medium livestock',temp:'Needs vary with breed and fleece; provide shade, airflow, dry shelter and protection from harsh weather.',food:'Good-quality forage/pasture, clean water and a balanced sheep-specific mineral plan from a livestock professional.',habitat:'Safe fencing, clean resting areas and companionship in a suitable flock.',hygiene:'Fleece management and shearing schedule depend on breed/climate; feet and parasite control need trained care.',movement:'Space to graze and move with the flock; calm handling reduces stress.',strength:'Can push and charge in fear; rams can be particularly forceful.',bite:'Not usually a bite-force concern; headbutting and flock movement are more relevant risks.',caution:'Do not approach rams face-on or get between animals in a tight pen. Use experienced livestock handlers.',fact:'Sudden diet changes can upset a ruminant’s digestion; feed plans should be gradual.',source:'https://www.merckvetmanual.com/management-and-nutrition/preventative-health-care-and-husbandry-of-beef-cattle/cattle-management-handling-facilities-design-and-transportation-in-beef-cattle'},
+ {id:'rabbit',name:'Rabbit',group:'Small pets',emoji:'🐰',tagline:'Quiet hopper with a hay-sized appetite',size:'Small',temp:'Often most comfortable around 15–21°C; rabbits are sensitive to overheating and need shade and airflow.',food:'Unlimited grass hay, leafy greens introduced safely, measured rabbit pellets and constant clean water.',habitat:'Large secure area to hop, hide, dig and rest; solid flooring and safe chew enrichment.',hygiene:'Spot-clean daily, clean litter area, brush to coat type and monitor nails, teeth and droppings.',movement:'Daily space to hop and explore; gentle handling close to the floor.',strength:'Strong hind legs and a powerful kick when frightened.',bite:'Can bite if scared; rabbit teeth can injure. Do not squeeze or pick up by the ears.',caution:'Heat, not eating, or very few droppings can be urgent. Rabbits need a vet experienced with rabbits.',fact:'Hay supports digestive health and natural tooth wear.',source:'https://www.rspca.org.uk/adviceandwelfare/pets'},
+ {id:'guineapig',name:'Guinea Pig',group:'Small pets',emoji:'🐹',tagline:'Little squeaker who needs vitamin C',size:'Small',temp:'A stable, well-ventilated room around 18–24°C is commonly comfortable; protect from drafts and overheating.',food:'Unlimited hay, guinea-pig pellets with vitamin C, leafy vegetables and fresh water. They require vitamin C in their diet.',habitat:'Spacious floor area with hideouts, soft safe bedding and compatible guinea-pig companionship.',hygiene:'Remove dirty bedding daily, fully clean regularly, check nails and coat and watch droppings.',movement:'Daily floor time in a safe enclosure and chew/hide enrichment.',strength:'Small and fragile; can twist or struggle if held insecurely.',bite:'May nip when frightened; avoid sudden grabbing and always support the body.',caution:'They hide illness well. Reduced appetite, fewer droppings or labored breathing need prompt veterinary advice.',fact:'Hay should make up the bulk of a guinea pig’s diet and help keep digestion moving.',source:'https://www.rspca.org.uk/adviceandwelfare/pets'},
+ {id:'budgie',name:'Budgerigar (Budgie)',group:'Birds & reptiles',emoji:'🦜',tagline:'Chatty little bird with big curiosity',size:'Small bird',temp:'Keep a stable, draft-free room; species, acclimation and health affect temperature needs. Avoid direct heat and sudden swings.',food:'A balanced bird diet (often pellets plus suitable vegetables/greens) with fresh water; seed-only diets are generally unbalanced.',habitat:'A roomy cage for wing movement plus supervised safe flight, perches at different heights and daily enrichment.',hygiene:'Refresh water and food dishes daily, keep the cage clean and arrange access to bird-savvy vet care.',movement:'Daily flying/exercise and social interaction suited to the bird’s comfort.',strength:'Small but strong enough to pinch with its beak and grip with its feet.',bite:'Beak pressure is not typically a major human hazard but a frightened bird can bite; avoid grabbing.',caution:'Smoke, aerosols, overheated non-stick cookware fumes and other airborne chemicals can be dangerous to birds.',fact:'Birds need sleep, enrichment and gentle handling, not just a cage with food.',source:'https://www.rspca.org.uk/adviceandwelfare/pets'},
+ {id:'horse',name:'Horse',group:'Farm',emoji:'🐴',tagline:'Athletic partner that needs expert care',size:'Large equine',temp:'Comfort varies with coat, acclimation, wind and humidity; provide shade, ventilation and shelter from severe weather.',food:'Forage is the foundation; any concentrates, salt or supplements should be planned with an equine professional.',habitat:'Safe fencing, suitable turnout, dry rest areas, companionship and careful stable management.',hygiene:'Daily checks, grooming, hoof care, dental checks and parasite/vaccination plans with professionals.',movement:'Regular movement and turnout; exercise should match fitness and weather.',strength:'Extremely powerful runner; can kick, bite or knock someone down even unintentionally.',bite:'Bite-force figures are not a useful safety guide; kicks, crushing and sudden movement are major risks.',caution:'Never stand directly behind a horse or approach suddenly. Handling and riding require trained adult supervision.',fact:'Horses are social animals and benefit from safe contact with other horses.',source:'https://www.rspca.org.uk/adviceandwelfare/pets'},
+ {id:'chicken',name:'Chicken',group:'Farm',emoji:'🐔',tagline:'Busy little forager with coop needs',size:'Small–medium poultry',temp:'Needs change with age and feathering; provide shade, ventilation and cool clean water in hot weather.',food:'Complete age-appropriate poultry feed; suitable greens and grit may be needed depending on diet and access.',habitat:'Predator-proof coop and outdoor run with dry bedding, roosts, nest boxes and room to scratch.',hygiene:'Clean waterers and feeders often; remove wet bedding and wash hands after handling birds or eggs.',movement:'Foraging, scratching, dust bathing and safe flock social time.',strength:'Can peck, scratch and flap strongly when frightened; roosters may have spurs.',bite:'Bites are not the main concern; pecks, scratches and spurs can injure.',caution:'Keep poultry housing clean and protect birds from dogs, wild predators and overheating. Wash hands after contact.',fact:'A dry, well-ventilated coop helps reduce moisture and respiratory problems.',source:'https://www.rspca.org.uk/adviceandwelfare/pets'},
+ {id:'turtle',name:'Aquatic Turtle',group:'Birds & reptiles',emoji:'🐢',tagline:'Slow-looking swimmer with specialist needs',size:'Species-dependent',temp:'No safe one-size temperature: water and basking temperatures depend on exact species and life stage.',food:'Diet varies widely by species and age; use a reputable species-specific feeding guide and veterinarian advice.',habitat:'Species-appropriate aquatic setup with filtration, dry basking area, UVB lighting where required and enough room to grow.',hygiene:'Test and maintain water, clean filters, keep basking areas clean and wash hands after handling.',movement:'Swimming room and a suitable dry basking area; never use a tiny decorative bowl.',strength:'Can paddle strongly and may scratch or bite if restrained.',bite:'Some turtles can bite firmly; never put fingers near the mouth or pick up unnecessarily.',caution:'Identify the exact species before setting up care. Reptiles can carry Salmonella; wash hands and keep habitat gear away from food areas.',fact:'UVB, diet and habitat needs are highly species-specific.',source:'https://www.rspca.org.uk/adviceandwelfare/pets'},
+ {id:'bearded-dragon',name:'Bearded Dragon',group:'Birds & reptiles',emoji:'🦎',tagline:'A calm reptile with precise habitat needs',size:'Medium reptile',temp:'Needs a controlled temperature gradient and basking zone specific to age/setup; use trusted species-specific husbandry guidance.',food:'An age-appropriate mix of suitable insects and plant foods, plus correct supplements as advised by an exotic-pet vet.',habitat:'Secure, ventilated enclosure with appropriate UVB, heat gradient, hides and climbing surfaces.',hygiene:'Clean waste promptly, maintain enclosure surfaces and check weight, skin, mouth and droppings.',movement:'Provide climbing and exploration opportunities within a safe enclosure.',strength:'Small but can scratch or bite if frightened; tail and limbs are delicate.',bite:'Not a pet to provoke or hand-feed carelessly; bite strength varies and is not the main care metric.',caution:'Incorrect heat, UVB or supplements can cause serious illness. Consult an exotic-animal veterinarian for setup checks.',fact:'“Room temperature” alone is not enough; reptiles depend on carefully managed heat and UVB.',source:'https://www.rspca.org.uk/adviceandwelfare/pets'}
+];
+const categoryList = [
+ {name:'All',emoji:'🌼'}, {name:'Dogs',emoji:'🐶'}, {name:'Cats',emoji:'🐱'}, {name:'Fish',emoji:'🐠'}, {name:'Farm',emoji:'🐮'}, {name:'Small pets',emoji:'🐰'}, {name:'Birds & reptiles',emoji:'🦜'}, {name:'Saved',emoji:'💗'}
+];
+let activeCategory = 'All';
+let selectedId = 'golden';
+let showSavedOnly = false;
+const saved = new Set();
+const searchInput = document.getElementById('animalSearch');
+const grid = document.getElementById('animalGrid');
+const detailPanel = document.getElementById('detailPanel');
+function esc(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function makeFilters(){
+ const root = document.getElementById('filters');
+ root.innerHTML = categoryList.map(c=>`<button class="filter ${activeCategory===c.name?'active':''}" data-category="${esc(c.name)}"><span class="emoji">${c.emoji}</span>${esc(c.name)}</button>`).join('');
+ root.querySelectorAll('button').forEach(btn=>btn.addEventListener('click',()=>{ activeCategory=btn.dataset.category; showSavedOnly=activeCategory==='Saved'; makeFilters(); renderGrid(); }));
+}
+function filteredAnimals(){
+ const q=searchInput.value.trim().toLowerCase();
+ return animals.filter(a=>{
+   const categoryPass=activeCategory==='All'||activeCategory==='Saved'||a.group===activeCategory;
+   const savedPass=!(showSavedOnly||activeCategory==='Saved')||saved.has(a.id);
+   const text=[a.name,a.group,a.tagline,a.size,a.temp,a.food].join(' ').toLowerCase();
+   return categoryPass&&savedPass&&(!q||text.includes(q));
+ });
+}
+function renderGrid(){
+ const result=filteredAnimals();
+ document.getElementById('resultCount').textContent=`${result.length} guide${result.length===1?'':'s'}`;
+ document.getElementById('directoryTitle').textContent=(activeCategory==='Saved'||showSavedOnly)?'Your saved animal guides':activeCategory==='All'?'Meet your animal besties':`${activeCategory} to love`;
+ document.getElementById('directorySubtitle').textContent=searchInput.value.trim()?`Showing matches for “${searchInput.value.trim()}”.`:'Choose a guide to open its care notes.';
+ if(!result.length){grid.innerHTML=`<div class="empty"><span class="empty-emoji">🐾</span><strong>No little match found.</strong><p>Try another animal name or tap “All”.</p></div>`;return;}
+ grid.innerHTML=result.map(a=>`<button class="animal-card ${a.id===selectedId?'selected':''}" data-id="${esc(a.id)}" aria-label="Open ${esc(a.name)} care guide">
+   <div class="card-top"><span class="animal-emoji">${a.emoji}</span><span class="card-fav ${saved.has(a.id)?'saved':''}" data-save="${esc(a.id)}" role="button" aria-label="${saved.has(a.id)?'Unsave':'Save'} ${esc(a.name)}">${saved.has(a.id)?'♥':'♡'}</span></div>
+   <h3>${esc(a.name)}</h3><p class="sub">${esc(a.tagline)}</p><div class="card-meta"><span class="group-tag">${esc(a.group)}</span><span class="temp-tag">${esc(a.size)}</span></div>
+ </button>`).join('');
+ grid.querySelectorAll('.animal-card').forEach(card=>card.addEventListener('click',e=>{
+   const saveTarget=e.target.closest('[data-save]');
+   if(saveTarget){e.preventDefault();e.stopPropagation();toggleSaved(saveTarget.dataset.save);return;}
+   selectedId=card.dataset.id;renderGrid();renderDetail();
+ }));
+}
+function renderDetail(){
+ const a=animals.find(x=>x.id===selectedId)||animals[0];
+ if(!a){detailPanel.innerHTML='';return;}
+ detailPanel.innerHTML=`<div class="detail-banner"><div class="detail-head"><div class="detail-emoji">${a.emoji}</div><div class="detail-title"><div class="mini">✦ ${esc(a.group)} care card</div><h2>${esc(a.name)}</h2><p>${esc(a.tagline)}</p></div><button class="save-guide" id="saveCurrent" title="Save guide" aria-label="Save guide">${saved.has(a.id)?'♥':'♡'}</button></div>
+ <div class="stat-grid"><div class="stat"><label>🌡️ Climate</label><strong>${esc(a.temp)}</strong></div><div class="stat"><label>📏 Size</label><strong>${esc(a.size)}</strong></div></div></div>
+ <div class="detail-body"><p class="section-kicker">✿ Everyday care essentials</p>
+ ${careItem('🥣','Food & water',a.food)}${careItem('🏡','Home & habitat',a.habitat)}${careItem('🧼','Hygiene & health',a.hygiene)}${careItem('🎾','Movement & enrichment',a.movement)}
+ <p class="section-kicker" style="margin-top:15px">✦ Strength & safety</p>${careItem('💪','Strength profile',a.strength)}${careItem('🦷','Bite / defence note',a.bite)}
+ <div class="warning"><h4>⚠️ Buddy-safety reminder</h4><p>${esc(a.caution)}</p></div>
+ <p class="detail-source">Care details are starter guidance. <a href="${esc(a.source)}" target="_blank" rel="noreferrer">Read a trusted care resource ↗</a></p>
+ </div>`;
+ document.getElementById('saveCurrent').addEventListener('click',()=>toggleSaved(a.id));
+}
+function careItem(icon,title,body){return `<div class="care-item"><div class="care-icon">${icon}</div><div><h4>${esc(title)}</h4><p>${esc(body)}</p></div></div>`;}
+function toggleSaved(id){if(saved.has(id))saved.delete(id);else saved.add(id);document.getElementById('savedCount').textContent=saved.size;renderGrid();renderDetail();}
+searchInput.addEventListener('input',()=>{renderGrid();});
+document.getElementById('clearSearch').addEventListener('click',()=>{searchInput.value='';activeCategory='All';showSavedOnly=false;makeFilters();renderGrid();searchInput.focus();});
+document.getElementById('showAll').addEventListener('click',()=>{activeCategory='All';showSavedOnly=false;searchInput.value='';makeFilters();renderGrid();});
+document.getElementById('showSaved').addEventListener('click',()=>{activeCategory='Saved';showSavedOnly=true;makeFilters();renderGrid();});
+const checkboxes=[...document.querySelectorAll('#routineChecks input')];
+function updateProgress(){let n=checkboxes.filter(c=>c.checked).length;document.getElementById('progressFill').style.width=`${n/checkboxes.length*100}%`;document.getElementById('progressText').textContent=`${n} of ${checkboxes.length} little-care wins today ${n===checkboxes.length?'🎉':'🌱'}`;checkboxes.forEach(c=>c.closest('.checkrow').classList.toggle('done',c.checked));}
+checkboxes.forEach(c=>c.addEventListener('change',updateProgress));
+makeFilters();renderGrid();renderDetail();updateProgress();
+
+// Installable app support (available when served over HTTPS or localhost).
+let deferredInstallPrompt = null;
+const installButton = document.getElementById('installApp');
+window.addEventListener('beforeinstallprompt', (event) => {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  if (installButton) installButton.hidden = false;
+});
+if (installButton) installButton.addEventListener('click', async () => {
+  if (!deferredInstallPrompt) {
+    alert('To install PawPal: open this app in Chrome from a secure website, tap ⋮, then choose “Add to Home screen” or “Install app”.');
+    return;
+  }
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  installButton.hidden = true;
+});
+window.addEventListener('appinstalled', () => { if (installButton) installButton.hidden = true; });
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+}
+</script>
+</body>
+</html>
