@@ -1,9 +1,10 @@
+
 {
   "id": "./",
   "name": "PawPal — Animal Care Guide",
   "short_name": "PawPal",
   "description": "A cute animal-care companion for pets, fish and farm animals.",
-  "start_url": "./index.html",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
@@ -11,6 +12,25 @@
   "theme_color": "#fff6f1",
   "categories": ["lifestyle", "education"],
   "icons": [
-    {"src":"pawpal-icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+    {
+      "src": "pawpal-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "pawpal-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "pawpal-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
   ]
 }
+
+
